@@ -45,8 +45,8 @@ fn assertCheckbox(any: anytype) void {
     const T = @TypeOf(any);
     const info = @typeInfo(T);
 
-    const Underlying = if (info == .ErrorUnion)
-        info.ErrorUnion.payload
+    const Underlying = if (info == .error_union)
+        info.error_union.payload
     else
         T;
 
@@ -55,7 +55,7 @@ fn assertCheckbox(any: anytype) void {
 
 fn assertCheckboxes(options: anytype) void {
     const info = @typeInfo(@TypeOf(options));
-    if (info == .Struct and info.Struct.is_tuple) {
+    if (info == .@"struct" and info.@"struct".is_tuple) {
         // Tuples only support comptime indexing
         inline for (options) |opt| {
             assertCheckbox(opt);

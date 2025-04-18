@@ -5,7 +5,7 @@ const Vec2 = @import("../Vec2.zig");
 const Rect = @import("../Rect.zig");
 const events = @import("../events.zig");
 const Frame = @import("../render/Frame.zig");
-const border = @import("border.zig");
+const b = @import("border.zig");
 const Padding = @import("Padding.zig");
 const LayoutProperties = @import("LayoutProperties.zig");
 const Constraints = @import("Constraints.zig");
@@ -16,10 +16,10 @@ pub const Config = struct {
     id: ?[]const u8 = null,
 
     /// Which borders are visible, see `Border`.
-    border: border.Border = border.Border.none(),
+    border: b.Border = b.Border.none(),
 
     /// The type of border, see `BorderType`.
-    border_type: border.BorderType = .solid,
+    border_type: b.BorderType = .solid,
 
     /// Additional padding around the inner widget, see `Padding`.
     padding: Padding = .{},
@@ -43,9 +43,9 @@ inner: Widget,
 
 inner_size: Vec2 = Vec2.zero(),
 
-border: border.Border,
+border: b.Border,
 
-border_type: border.BorderType,
+border_type: b.BorderType,
 
 padding: Padding,
 
@@ -142,7 +142,7 @@ pub fn layout(self: *Block, constraints: Constraints) !Vec2 {
     };
     self.inner_size = try self.inner.layout(inner_constraints);
 
-    var size = .{
+    var size: Vec2 = .{
         .x = self_constraints.max_width,
         .y = self_constraints.max_height,
     };
@@ -167,7 +167,7 @@ pub fn layoutProps(self: *Block) LayoutProperties {
 fn renderBorder(self: *Block, area: Rect, frame: Frame, theme: display.Theme) void {
     const min = area.min;
     const max = area.max;
-    const chars = border.BorderCharacters.fromType(self.border_type);
+    const chars = b.BorderCharacters.fromType(self.border_type);
 
     if (area.height() > 0) {
         if (self.border.top)

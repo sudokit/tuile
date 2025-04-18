@@ -29,47 +29,47 @@ pub fn init(context: anytype) Backend {
     const vtable = struct {
         pub fn destroy(pointer: *anyopaque) void {
             const self: T = @ptrCast(@alignCast(pointer));
-            return ptr_info.Pointer.child.destroy(self);
+            return ptr_info.pointer.child.destroy(self);
         }
 
         pub fn pollEvent(pointer: *anyopaque) anyerror!?events.Event {
             const self: T = @ptrCast(@alignCast(pointer));
-            return ptr_info.Pointer.child.pollEvent(self);
+            return ptr_info.pointer.child.pollEvent(self);
         }
 
         pub fn refresh(pointer: *anyopaque) anyerror!void {
             const self: T = @ptrCast(@alignCast(pointer));
-            return ptr_info.Pointer.child.refresh(self);
+            return ptr_info.pointer.child.refresh(self);
         }
 
         pub fn printAt(pointer: *anyopaque, pos: Vec2, text: []const u8) anyerror!void {
             const self: T = @ptrCast(@alignCast(pointer));
-            return ptr_info.Pointer.child.printAt(self, pos, text);
+            return ptr_info.pointer.child.printAt(self, pos, text);
         }
 
         pub fn windowSize(pointer: *anyopaque) anyerror!Vec2 {
             const self: T = @ptrCast(@alignCast(pointer));
-            return ptr_info.Pointer.child.windowSize(self);
+            return ptr_info.pointer.child.windowSize(self);
         }
 
         pub fn enableEffect(pointer: *anyopaque, effect: display.Style.Effect) anyerror!void {
             const self: T = @ptrCast(@alignCast(pointer));
-            return ptr_info.Pointer.child.enableEffect(self, effect);
+            return ptr_info.pointer.child.enableEffect(self, effect);
         }
 
         pub fn disableEffect(pointer: *anyopaque, effect: display.Style.Effect) anyerror!void {
             const self: T = @ptrCast(@alignCast(pointer));
-            return ptr_info.Pointer.child.disableEffect(self, effect);
+            return ptr_info.pointer.child.disableEffect(self, effect);
         }
 
         pub fn useColor(pointer: *anyopaque, color: display.ColorPair) anyerror!void {
             const self: T = @ptrCast(@alignCast(pointer));
-            return ptr_info.Pointer.child.useColor(self, color);
+            return ptr_info.pointer.child.useColor(self, color);
         }
 
         pub fn requestMode(pointer: *anyopaque, mode: u32) !ReportMode {
             const self: T = @ptrCast(@alignCast(pointer));
-            return ptr_info.Pointer.child.requestMode(self, mode);
+            return ptr_info.pointer.child.requestMode(self, mode);
         }
     };
 

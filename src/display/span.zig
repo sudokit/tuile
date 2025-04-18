@@ -1,12 +1,12 @@
 const std = @import("std");
 const display = @import("../display.zig");
-const Style = display.Style;
+// const Style = display.Style;
 
 /// A text with an associated style
 pub const StyledText = struct {
     text: []const u8,
 
-    style: Style,
+    style: display.Style,
 };
 
 /// A chunk of text between [start; end) with an associated style
@@ -15,7 +15,7 @@ pub const StyledChunk = struct {
 
     end: usize,
 
-    style: Style,
+    style: display.Style,
 };
 
 /// A spanned styled text.
@@ -99,7 +99,7 @@ pub const Span = struct {
         return self.text.items[chunk.start..chunk.end];
     }
 
-    pub fn getStyleForChunk(self: Span, i: usize) Style {
+    pub fn getStyleForChunk(self: Span, i: usize) display.Style {
         const chunk = self.chunks.items[i];
         return chunk.style;
     }
@@ -184,7 +184,7 @@ pub const SpanUnmanaged = struct {
         return self.text.items[chunk.start..chunk.end];
     }
 
-    pub fn getStyleForChunk(self: SpanUnmanaged, i: usize) Style {
+    pub fn getStyleForChunk(self: SpanUnmanaged, i: usize) display.Style {
         const chunk = self.chunks.items[i];
         return chunk.style;
     }
@@ -217,7 +217,7 @@ pub const SpanView = struct {
         return self.text[chunk.start..chunk.end];
     }
 
-    pub fn getStyleForChunk(self: SpanView, i: usize) Style {
+    pub fn getStyleForChunk(self: SpanView, i: usize) display.Style {
         const chunk = self.chunks[i];
         return chunk.style;
     }
@@ -233,20 +233,20 @@ test "append plain" {
     try expect(test_span.getChunks().len == 1);
     try expect(std.mem.eql(u8, test_span.getTextForChunk(0), "hello"));
     try expect(std.mem.eql(u8, test_span.getText(), "hello"));
-    try expect(std.meta.eql(test_span.getStyleForChunk(0), Style{}));
+    try expect(std.meta.eql(test_span.getStyleForChunk(0), display.Style{}));
 
     try test_span.appendPlain(" world");
     try expect(test_span.getChunks().len == 2);
     try expect(std.mem.eql(u8, test_span.getTextForChunk(1), " world"));
     try expect(std.mem.eql(u8, test_span.getText(), "hello world"));
-    try expect(std.meta.eql(test_span.getStyleForChunk(1), Style{}));
+    try expect(std.meta.eql(test_span.getStyleForChunk(1), display.Style{}));
 }
 
 test "append styled" {
     var test_span = Span.init(std.testing.allocator);
     defer test_span.deinit();
 
-    var style = Style{ .fg = display.color("red") };
+    var style = display.Style{ .fg = display.color("red") };
 
     try test_span.append(.{ .text = "hello", .style = style });
     try expect(test_span.getChunks().len == 1);
@@ -286,7 +286,7 @@ test "append format" {
     var test_span = Span.init(std.testing.allocator);
     defer test_span.deinit();
 
-    const style = Style{ .fg = display.color("red") };
+    const style = display.Style{ .fg = display.color("red") };
     try test_span.appendFormat("{d} {s}", .{ 1, "hello" }, style);
     try expect(std.mem.eql(u8, test_span.getText(), "1 hello"));
     try expect(std.mem.eql(u8, test_span.getTextForChunk(0), "1 hello"));
@@ -301,20 +301,20 @@ test "unmanaged append plain" {
     try expect(test_span.getChunks().len == 1);
     try expect(std.mem.eql(u8, test_span.getTextForChunk(0), "hello"));
     try expect(std.mem.eql(u8, test_span.getText(), "hello"));
-    try expect(std.meta.eql(test_span.getStyleForChunk(0), Style{}));
+    try expect(std.meta.eql(test_span.getStyleForChunk(0), display.Style{}));
 
     try test_span.appendPlain(std.testing.allocator, " world");
     try expect(test_span.getChunks().len == 2);
     try expect(std.mem.eql(u8, test_span.getTextForChunk(1), " world"));
     try expect(std.mem.eql(u8, test_span.getText(), "hello world"));
-    try expect(std.meta.eql(test_span.getStyleForChunk(1), Style{}));
+    try expect(std.meta.eql(test_span.getStyleForChunk(1), display.Style{}));
 }
 
 test "unmanaged append styled" {
     var test_span = SpanUnmanaged{};
     defer test_span.deinit(std.testing.allocator);
 
-    var style = Style{ .fg = display.color("red") };
+    var style = display.Style{ .fg = display.color("red") };
 
     try test_span.append(std.testing.allocator, .{ .text = "hello", .style = style });
     try expect(test_span.getChunks().len == 1);
@@ -354,7 +354,7 @@ test "unmanaged append format" {
     var test_span = SpanUnmanaged{};
     defer test_span.deinit(std.testing.allocator);
 
-    const style = Style{ .fg = display.color("red") };
+    const style = display.Style{ .fg = display.color("red") };
     try test_span.appendFormat(std.testing.allocator, "{d} {s}", .{ 1, "hello" }, style);
     try expect(std.mem.eql(u8, test_span.getText(), "1 hello"));
     try expect(std.mem.eql(u8, test_span.getTextForChunk(0), "1 hello"));
@@ -367,8 +367,8 @@ test "append managed span to managed span" {
     var span2 = Span.init(std.testing.allocator);
     defer span2.deinit();
 
-    const style1 = Style{ .fg = display.color("red") };
-    const style2 = Style{ .fg = display.color("blue") };
+    const style1 = display.Style{ .fg = display.color("red") };
+    const style2 = display.Style{ .fg = display.color("blue") };
 
     try span1.append(.{ .text = "hello", .style = style1 });
     try span2.append(.{ .text = " world", .style = style2 });
@@ -387,8 +387,8 @@ test "append unmanaged span to managed span" {
     var span2 = SpanUnmanaged{};
     defer span2.deinit(std.testing.allocator);
 
-    const style1 = Style{ .fg = display.color("red") };
-    const style2 = Style{ .fg = display.color("blue") };
+    const style1 = display.Style{ .fg = display.color("red") };
+    const style2 = display.Style{ .fg = display.color("blue") };
 
     try span1.append(.{ .text = "hello", .style = style1 });
     try span2.append(std.testing.allocator, .{ .text = " world", .style = style2 });
@@ -407,8 +407,8 @@ test "append managed span to unmanaged span" {
     var span2 = Span.init(std.testing.allocator);
     defer span2.deinit();
 
-    const style1 = Style{ .fg = display.color("red") };
-    const style2 = Style{ .fg = display.color("blue") };
+    const style1 = display.Style{ .fg = display.color("red") };
+    const style2 = display.Style{ .fg = display.color("blue") };
 
     try span1.append(std.testing.allocator, .{ .text = "hello", .style = style1 });
     try span2.append(.{ .text = " world", .style = style2 });
@@ -427,8 +427,8 @@ test "append unmanaged span to unmanaged span" {
     var span2 = SpanUnmanaged{};
     defer span2.deinit(std.testing.allocator);
 
-    const style1 = Style{ .fg = display.color("red") };
-    const style2 = Style{ .fg = display.color("blue") };
+    const style1 = display.Style{ .fg = display.color("red") };
+    const style2 = display.Style{ .fg = display.color("blue") };
 
     try span1.append(std.testing.allocator, .{ .text = "hello", .style = style1 });
     try span2.append(std.testing.allocator, .{ .text = " world", .style = style2 });

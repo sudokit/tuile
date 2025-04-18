@@ -46,7 +46,7 @@ fn createWidgets(children: anytype) !std.ArrayListUnmanaged(Widget) {
     var widgets = std.ArrayListUnmanaged(Widget){};
 
     const info = @typeInfo(@TypeOf(children));
-    if (info == .Struct and info.Struct.is_tuple) {
+    if (info == .@"struct" and info.@"struct".is_tuple) {
         // Tuples only support comptime indexing
         inline for (children) |child| {
             try widgets.append(internal.allocator, try Widget.fromAny(child));

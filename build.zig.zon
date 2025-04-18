@@ -1,13 +1,8 @@
 .{
-    .name = "tuile",
+    .name = .tuile,
+    .fingerprint = 0x2507a06f59124d11,
     .version = "0.1.3",
     .dependencies = .{
-        .@"build.crab" = .{
-            .url = "https://github.com/akarpovskii/build.crab/archive/refs/tags/v0.1.5.tar.gz",
-            .hash = "1220c7d071bdde500955b0d5b807cb1a66687b915a020c3e87496623243912c77bed",
-            // Can't use lazy here because tuile-crossterm uses it eagerly
-            // .lazy = true,
-        },
         .@"tuile-crossterm" = .{
             .url = "https://github.com/akarpovskii/tuile-crossterm/archive/refs/tags/v0.1.4.tar.gz",
             .hash = "12207a56bb24860aa8a8984c3ae331ef547f2cdaa84981067c6930f1debf9f81fac6",
@@ -48,12 +43,16 @@
             .hash = "1220a322cb0a85e1ea176fddc9098053e92af9be5541a4e05bdf91f3dad20a30d338",
             .lazy = true,
         },
+        .build_crab = .{
+            .url = "git+https://github.com/akarpovskii/build.crab#024fac10c475235e80f4b8fb172e39fc20a15a9d",
+            .hash = "build_crab-0.2.0-V2z3N8C7AABofsXwDYy-nHg6rrXngQjOs8J4LGlqIcew",
+        },
         .zg = .{
-            .url = "https://codeberg.org/dude_the_builder/zg/archive/c425c9c8511bf92e14b8b612d1d16e774b186f2e.tar.gz",
-            .hash = "1220c79009f1e443b015db4de6e5319432538ead2fea10d271f3f35d3ae83c996789",
+            .url = "git+https://codeberg.org/atman/zg#aa93e6ae78d4146431460e4a5f70b118a19f5c0c",
+            .hash = "zg-0.13.5-oGqU3I6Z7QLV3PcngiIPop2sAiHj740sK36VsXmYUMAp",
         },
     },
-    .minimum_zig_version = "0.12.0",
+    .minimum_zig_version = "0.14.0",
     .paths = .{
         "build.zig",
         "build.zig.zon",

@@ -1,5 +1,6 @@
 const std = @import("std");
 const internal = @import("internal.zig");
+pub const Constraints = @import("widgets/Constraints.zig");
 pub const Vec2 = @import("Vec2.zig");
 pub const Rect = @import("Rect.zig");
 pub const backends = @import("backends.zig");
@@ -58,9 +59,9 @@ pub const Tuile = struct {
         errdefer backend.destroy();
         const text_clustering_type: text_clustering.ClusteringType =
             switch (try backend.requestMode(GRAPHEME_CLUSTERING_MODE)) {
-            .not_recognized, .reset => .codepoints,
-            .set => .graphemes,
-        };
+                .not_recognized, .reset => .codepoints,
+                .set => .graphemes,
+            };
 
         try internal.init(text_clustering_type);
         var self = blk: {
@@ -180,7 +181,7 @@ pub const Tuile = struct {
     }
 
     fn redraw(self: *Tuile) !void {
-        const constraints = .{
+        const constraints: Constraints = .{
             .max_width = self.window_size.x,
             .max_height = self.window_size.y,
         };

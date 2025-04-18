@@ -44,11 +44,11 @@ pub fn build(b: *std.Build) void {
             lib_unit_tests.linkSystemLibrary("ncurses");
         },
         .crossterm => {
-            const build_crab = @import("build.crab");
+            const build_crab = @import("build_crab");
             var crossterm_lib_path: std.Build.LazyPath = undefined;
 
             if (user_options.prebuilt) {
-                const rust_target = build_crab.Target.fromZig(target.result) catch @panic("unable to convert target triple to Rust");
+                const rust_target = build_crab.rust.Target.fromZig(target.result) catch @panic("unable to convert target triple to Rust");
                 const prebuilt_name = b.fmt("tuile-crossterm-{}", .{rust_target});
                 const prebuilt_opt = b.lazyDependency(prebuilt_name, .{});
                 if (prebuilt_opt == null) {
@@ -64,10 +64,10 @@ pub fn build(b: *std.Build) void {
                 }
                 std.log.info("Building crossterm backend from source", .{});
                 const tuile_crossterm = tuile_crossterm_opt.?;
-                crossterm_lib_path = build_crab.addRustStaticlibWithUserOptions(
+                crossterm_lib_path = build_crab.addCargoBuild(
                     b,
                     .{
-                        .name = "libtuile_crossterm.a",
+                        // .name = "libtuile_crossterm.a",
                         .manifest_path = tuile_crossterm.path("Cargo.toml"),
                         .cargo_args = &.{
                             "--release",
@@ -120,7 +120,7 @@ pub const Options = struct {
         } else {
             const names = comptime blk: {
                 const info = @typeInfo(Backend);
-                const fields = info.Enum.fields;
+                const fields = info.@"enum".fields;
                 var names: [fields.len][]const u8 = undefined;
                 for (&names, fields) |*name, field| {
                     name.* = field.name;

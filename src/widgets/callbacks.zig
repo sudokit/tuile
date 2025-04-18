@@ -3,7 +3,7 @@ const std = @import("std");
 pub fn Callback(comptime args: anytype) type {
     const info = @typeInfo(@TypeOf(args));
 
-    comptime if (info == .Type and args == void) {
+    comptime if (info == .type and args == void) {
         return struct {
             const Self = @This();
 
@@ -14,8 +14,8 @@ pub fn Callback(comptime args: anytype) type {
                 self.cb(self.payload);
             }
         };
-    } else if (info == .Struct and info.Struct.is_tuple) {
-        const tuple = info.Struct;
+    } else if (info == .@"struct" and info.@"struct".is_tuple) {
+        const tuple = info.@"struct";
         return switch (tuple.fields.len) {
             0 => Callback(void),
             1 => Callback(args[0]),

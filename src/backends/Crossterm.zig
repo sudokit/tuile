@@ -137,7 +137,7 @@ pub fn windowSize(_: *Crossterm) !Vec2 {
 
 pub fn enableEffect(_: *Crossterm, effect: display.Style.Effect) !void {
     var rust_effect: RustEffect = undefined;
-    inline for (@typeInfo(display.Style.Effect).Struct.fields) |field| {
+    inline for (@typeInfo(display.Style.Effect).@"struct".fields) |field| {
         @field(rust_effect, field.name) = @field(effect, field.name);
     }
     crossterm_enable_effect(rust_effect);
@@ -145,7 +145,7 @@ pub fn enableEffect(_: *Crossterm, effect: display.Style.Effect) !void {
 
 pub fn disableEffect(_: *Crossterm, effect: display.Style.Effect) !void {
     var rust_effect: RustEffect = undefined;
-    inline for (@typeInfo(display.Style.Effect).Struct.fields) |field| {
+    inline for (@typeInfo(display.Style.Effect).@"struct".fields) |field| {
         @field(rust_effect, field.name) = @field(effect, field.name);
     }
     crossterm_disable_effect(rust_effect);

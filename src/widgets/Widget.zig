@@ -200,7 +200,7 @@ pub fn constructVTable(comptime T: type) VTable {
 
 pub fn init(context: anytype) Widget {
     const PtrT = @TypeOf(context);
-    comptime if (@typeInfo(PtrT) != .Pointer) {
+    comptime if (@typeInfo(PtrT) != .pointer) {
         @compileError("expected a widget pointer, got " ++ @typeName(PtrT));
     };
     const T = std.meta.Child(PtrT);
@@ -246,7 +246,7 @@ pub inline fn id(self: Widget) ?[]const u8 {
 }
 
 pub fn fromAny(any: anytype) anyerror!Widget {
-    const ok = if (@typeInfo(@TypeOf(any)) == .ErrorUnion)
+    const ok = if (@typeInfo(@TypeOf(any)) == .error_union)
         try any
     else
         any;
